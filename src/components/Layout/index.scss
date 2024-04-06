@@ -1,0 +1,54 @@
+.layout{
+  width: 100%;
+  min-width: 1100px;
+}
+.header {
+  padding: 0;
+  background: #ffffff;
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+}
+
+.logo {
+  width: 200px;
+  height: 60px;
+  background: url('~@/assets/logo.png') no-repeat center / 160px auto;
+}
+
+.layout-content {
+  overflow: auto;
+  display: flex;
+  margin-top: 64px;
+  margin-left: 150px;
+  padding: 0px 20px 60px 20px;
+}
+
+.user-info {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding-right: 20px;
+  color: #fff;
+
+  .user-name {
+    margin-right: 20px;
+  }
+
+  .user-logout {
+    display: inline-block;
+    cursor: pointer;
+  }
+}
+
+.sider{
+  margin-top: 64px;
+  position: fixed !important;
+  height: calc(100vh - 64px - 60px);
+  z-index: 100;
+
+}
+
+.ant-menu-item {
+  height: 60px !important;
+}
