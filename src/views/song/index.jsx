@@ -52,7 +52,7 @@ export default function SongDetail() {
     // 包含这首歌的歌单
     const getSimiPlayList = () => simiPlayList({ id })
         .then(({ data: res }) => res.code !== 200 ? Promise.reject(res.message) : res)
-        .then(res => { setPlaylists(res.playlists) })
+        .then(res => setPlaylists(res.playlists))
         .catch(err => message.error({ content: err.message }))
 
     // 获取可以调用此接口获取歌曲相关视频 (区别于 MV)， 有些歌曲没有 MV 但是有用户上传的与此歌曲相关的 Mlog

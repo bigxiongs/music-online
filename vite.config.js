@@ -1,18 +1,27 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 export default defineConfig({
-  base:'./',
+  base: "./",
   plugins: [react()],
   resolve: {
-    alias: {'@': '/src'}    
+    alias: { "@": "/src" },
   },
   css: {
     preprocessorOptions: {
-        scss: {
-            javascriptEnabled: true,
-            additionalData: '@import "@/index.scss";',
-        },
+      scss: {
+        javascriptEnabled: true,
+        additionalData: '@import "@/index.scss";',
+      },
     },
-},
-})
+  },
+  build: {
+    minify: "terser",
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+    },
+  },
+});

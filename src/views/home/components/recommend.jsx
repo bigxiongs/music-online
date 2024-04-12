@@ -3,7 +3,6 @@ import { hotPlayList, playList } from '@/apis/home';
 import { App } from 'antd';
 import Card from './card';
 import PlayList from '@/components/playlist/list';
-import { wrap } from '@/utils';
 
 const LIMIT = 6;
 
@@ -37,7 +36,7 @@ export default memo(function Recommend() {
     };
 
     // 热门标签切换
-    const getIndex = useCallback(wrap(getPlayList), [tags]); //记忆函数，只有tags发生变化了才会生成新的引用，一般用于像组件传递的函数
+    const getIndex = useCallback(() => {getPlayList()}, [tags]); //记忆函数，只有tags发生变化了才会生成新的引用，一般用于像组件传递的函数
 
     useEffect(() => { getHotTags(); getPlayList(); }, []);
 

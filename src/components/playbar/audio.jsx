@@ -97,11 +97,7 @@ function Audio({ ctx }, ref) {
     }
 
     // 监听音频时间， 实时更新当前播放时间
-    const updateSongTime = (e) => {
-        if (initAudioReady) {
-            setCurTime(e.target.currentTime);
-        }
-    };
+    const updateSongTime = e => initAudioReady && setCurTime(e.target.currentTime);
 
     useEffect(() => {
         setInitAudioReady(false);

@@ -48,58 +48,37 @@ export default function PlayList() {
     const [total, setTotal] = useState(0);
 
     // 获取分类数据
-    const getCatlist = async () => {
-        setLoading(true);
-        const { data: res } = await catlist();
-        const arr = [];
-
-        if (res.code !== 200) {
-            return message.error({
-                content: res.message
-            });
-        }
-
-        for (let k in res.categories) {
-            arr.push({
-                name: res.categories[k],
-                children: res.sub.filter(idm => idm.category == k)
-            })
-        }
-
-        setCategories(arr);
-        setLoading(false);
-    };
+    const mapCategory = res => Object.keys(res.categories).map(k => ({
+        name: res.categories[k],
+        children: res.sub.filter(idm => idm.category == k)
+    }))
+    const getCatlist = () => Promise.resolve(() => setLoading(true))
+        .then(() => catlist())
+        .then(({ data: res }) => res.code !== 200 ? Promise.reject(res.message) : res)
+        .then(mapCategory)
+        .then(setCategories)
+        .then(() => setLoading(false))
+        .catch(err => message.error({ content: err.message }))
 
     // 根据分类获取歌单列表
-    const getPlayList = async (param) => {
-        setListLoad(true);
-        const { data: res } = await playList(param);
-
-        if (res.code !== 200) {
-            return message.error({
-                content: res.message
-            });
-        }
-
-        const newLists = param.offset !== 0 ? [...lists, ...res.playlists] : res.playlists;
+    const setNewList = (params, res) => {
+        const newLists = params.offset !== 0 ? [...lists, ...res.playlists] : res.playlists;
 
         setLists(newLists);
         setListLoad(false);
         setTotal(res.total);
-    };
+    }
+    const getPlayList = params => Promise.resolve(setListLoad(true))
+        .then(() => playList(params))
+        .then(({ data: res }) => res.code !== 200 ? Promise.reject(res.message) : res)
+        .then(res => setNewList(params, res))
+        .catch(err => message.error({ content: err.message }))
 
     // 加载更多
-    const loadMore = () => {
-        console.log(111)
-        if (!listLoad) {
-            const newParams = { ...params, offset: lists.length };
-
-            getPlayList(newParams);
-        }
-    };
+    const loadMore = () => !listLoad && getPlayList({ ...params, offset: lists.length })
 
     // 切换歌单类别
-    const selectType = (item) => () => {
+    const selectType = item => () => {
         setSearchParams({
             cat: item.name,
             order: params.order

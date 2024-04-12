@@ -77,35 +77,19 @@ export default function PlayListDetail() {
     };
 
     // 相关歌单推荐
-    const getRecom = async (params) => {
-        const { data: res } = await playlistRelated(params)
-
-        if (res.code !== 200) {
-            return message.error({
-                content: res.message
-            });
-        }
-
-        setPlaylist(res.playlists);
-    };
+    const getRecom = params => playlistRelated(params)
+        .then(({ data: res }) => res.code !== 200 ? Promise.reject(res.message) : res)
+        .then(res => setPlaylist(res.playlists))
+        .catch(err => message.error({ content: err.message }))
 
     // 歌单精彩评论
-    const getComment = async (params) => {
-        const { data: res } = await playlistComment(params)
-
-        if (res.code !== 200) {
-            return message.error({
-                content: res.message
-            });
-        }
-
-        setComments(res.comments);
-    };
+    const getComment = params => playlistComment(params)
+        .then(({ data: res }) => res.code !== 200 ? Promise.reject(res.message) : res)
+        .then(res => setComments(res.comments))
+        .catch(err => message.error({ content: err.message }))
 
     // 播放列表为当前歌单的全部歌曲
-    const playAllSongs = () => {
-        playAllSong(songList);
-    };
+    const playAllSongs = () => { playAllSong(songList) };
 
     // 显示登录弹窗
     // const loginHanlder = () => {
@@ -211,7 +195,7 @@ export default function PlayListDetail() {
                                         <>
                                             <span>Tags:</span>
                                             {
-                                                info.tags.map(tag => <span>#{tag}</span>)
+                                                info.tags.map(tag => <span key={tag}>#{tag}</span>)
                                             }
                                         </>
                                     )

@@ -28,6 +28,7 @@ instance.interceptors.response.use(function (response) {
 
 const request = (method) => (url, data, config) =>
   instance({ url, method, data, ...config });
+  
 const api = {
   get: request("get"),
   post: request("post"),
